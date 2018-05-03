@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pre-commit":"npm run lint",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode=development -w",
+    "build": "webpack --mode=production",
+    "lint": "eslint --fix --ext --cache .js src"
   },
   "repository": {
     "type": "git",
@@ -18,8 +22,13 @@
   "homepage": "https://github.com/USTCLX/SXIntro#readme",
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "pre-commit": "^1.2.2",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.1.2"
   },

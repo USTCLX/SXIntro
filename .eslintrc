@@ -1,11 +1,15 @@
 {
 	"env": {
 		"node": true,
-		"es6": true
+		"es6": true,
+		"browser": true
 	},
 	"parser": "babel-eslint",
 	"extends": "airbnb/base",
 	"rules": {
+		"linebreak-style":[0],
+		"no-plusplus":[0],
+		"prefer/default-export":[0],
 		"quotes": [
 			2,
 			"single"

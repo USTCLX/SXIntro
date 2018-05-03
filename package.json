@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "pre-commit":"lint",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode=development -w",
     "build": "webpack --mode=production",
     "lint": "eslint --fix --cache --ext  .js src"
   },
+  "pre-commit":["lint"],  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/USTCLX/SXIntro.git"

@@ -109,9 +109,6 @@ function querySelector(baseElement, selectors) {
   eleList = baseElement.querySelectorAll(selectors);
   return eleList;
 }
-
-haha;
-
 export default {
   deepClone, getEleById, isNumber, isObject, isString, isUndefined, isArray, querySelector
 };

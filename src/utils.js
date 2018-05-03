@@ -110,6 +110,8 @@ function querySelector(baseElement, selectors) {
   return eleList;
 }
 
+haha;
+
 export default {
   deepClone, getEleById, isNumber, isObject, isString, isUndefined, isArray, querySelector
 };

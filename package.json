@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "pre-commit":"npm run lint",
+    "pre-commit":"lint",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode=development -w",
     "build": "webpack --mode=production",
-    "lint": "eslint --fix --ext --cache .js src"
+    "lint": "eslint --fix --cache --ext  .js src"
   },
   "repository": {
     "type": "git",

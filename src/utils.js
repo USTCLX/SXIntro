@@ -122,8 +122,53 @@ function querySelector(baseElement, selectors) {
 	return baseElement.querySelectorAll(selectors);
 }
 
+/**
+ * 获取元素的属性值
+ * @param {DOM} elem Dom元素
+ * @param {String} attr
+ */
 function getAttribute(elem, attr) {
 	return elem.getAttribute(attr);
+}
+
+/**
+	 * 获取元素的坐标
+	 * @param {DOM} element
+	 */
+function getOffset(elem) {
+	const {body} = document;
+	const docEl = document.documentElement;
+	const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+	const scrollLeft = window.pageXOffset || docEl.scrollTop || body.scrollTop;
+	const rect = elem.getBoundingClientRect();
+	return {
+		top: rect.top + scrollTop,
+		left: rect.left + scrollLeft,
+		width: rect.width,
+		height: rect.height
+	};
+}
+
+/**
+ * 为Dom元素增加Class
+ * @param {DOM} elem
+ * @param {String} klass
+ */
+function addClass(elem, klass) {
+	const currentKlass = elem.className;
+	const klsReg = new RegExp(klass, 'ig');
+	if (!klsReg.test(currentKlass)) {
+		elem.className = `${currentKlass} ${klass}`;
+	}
+}
+
+function removeClass(elem, klass) {
+	let currentKlass = elem.className;
+	const klsReg = new RegExp(klass, 'ig');
+	if (klsReg.test(currentKlass)) {
+		currentKlass = currentKlass.replace(klass, '');
+		elem.className = currentKlass;
+	}
 }
 
 export default {
@@ -135,6 +180,9 @@ export default {
 	isUndefined,
 	isArray,
 	querySelector,
-	getAttribute
+	getAttribute,
+	getOffset,
+	addClass,
+	removeClass
 };
 

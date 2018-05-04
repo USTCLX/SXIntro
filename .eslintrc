@@ -9,6 +9,9 @@
 	"rules": {
 		"linebreak-style":[0],
 		"no-plusplus":[0],
+		"no-underscore-dangle":[0],
+		"no-tabs":[0],
+		"indent":["error","tab"],
 		"prefer/default-export":[0],
 		"quotes": [
 			2,

@@ -35,7 +35,7 @@ class SXIntro {
 	}
 
 	/**
-   *  设置说明
+   * 设置说明
    * 数组格式，数组中的次序即代表第几步的引导说明。
    * @param {arry} intros {1:'第一步：这里是XXX'，2:'第二步:这里是XXX'}
    */
@@ -118,6 +118,14 @@ class SXIntro {
 
 		targetElement.appendChild(overlay);
 		targetElement.appendChild(helperLayer);
+
+		const self = this;
+		setTimeout(() => {
+			const helpeLayer = document.querySelector('.intro-helperLayer');
+			self.currentStep = 1;
+			self._toggleShowElem();
+			self._setLayerPositon(helpeLayer);
+		}, 1000);
 	}
 
 	/**

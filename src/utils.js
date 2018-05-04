@@ -111,15 +111,17 @@ function getEleById(id) {
 }
 
 /**
- * 获取元素集合
+ * 获取元素
  * @param {DOM} baseElement
- * @param {选择器} selectors
+ * @param {String} selectors
+ * @param {Boolen}
  */
-function querySelector(baseElement, selectors) {
-	if (!baseElement || !isString(selectors) || !baseElement.querySelectorAll) {
+function querySelector(baseElement, selectors, single) {
+	const elem = baseElement || document.body;
+	if (!isString(selectors) || !elem.querySelectorAll) {
 		throw new Error('querySelector err');
 	}
-	return baseElement.querySelectorAll(selectors);
+	return single ? elem.querySelector(selectors) : elem.querySelectorAll(selectors);
 }
 
 /**
@@ -132,11 +134,11 @@ function getAttribute(elem, attr) {
 }
 
 /**
-	 * 获取元素的坐标
-	 * @param {DOM} element
-	 */
+ * 获取元素的坐标
+ * @param {DOM} element
+ */
 function getOffset(elem) {
-	const {body} = document;
+	const { body } = document;
 	const docEl = document.documentElement;
 	const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
 	const scrollLeft = window.pageXOffset || docEl.scrollTop || body.scrollTop;
@@ -162,6 +164,11 @@ function addClass(elem, klass) {
 	}
 }
 
+/**
+ * 为Dom元素删除Class
+ * @param {DOM} elem
+ * @param {String} klass
+ */
 function removeClass(elem, klass) {
 	let currentKlass = elem.className;
 	const klsReg = new RegExp(klass, 'ig');

@@ -14,13 +14,16 @@ class SXIntro {
 			prevLabel: '上一步 &larr;',
 			skipLabel: '跳过',
 			donwLabel: '完成',
-			tooltipPositio: 'bottom',
+			tooltipPosition: 'bottom',
 			overlayOpacity: 0.8,
 			helperElementPadding: 10
 		};
 		this.intros = [];
 		this.initIntroElem = false;
 		this.currentStep = 0;
+
+		this.helperLayer = null;
+		this.tooltipReferenceLayer = null;
 
 		// 设置根元素
 		this._getTargetElem(id);
@@ -58,10 +61,29 @@ class SXIntro {
    */
 	start() {
 		if (!this.initIntroElem) {
+			// 创建元素
 			this._createIntroElem();
 		} else {
 			console.log('aha');
 		}
+
+		// 提高被引导元素的z-index
+		this._toggleShowElem();
+		this._setMainLayerPositon();
+		this._setTooltipLayerPosition();
+		this._setTooltipLayerContent();
+		this._showTooltipLayer(300);
+		const self = this;
+		utils.delay(() => {
+			self.currentStep++;
+			self._hideTooltipLayer();
+			self._toggleShowElem();
+			self._setMainLayerPositon();
+			self._setTooltipLayerPosition();
+			self._setTooltipLayerContent();
+			self._showTooltipLayer(300);
+		}, 1000);
+
 		return this;
 	}
 
@@ -103,51 +125,154 @@ class SXIntro {
 	_createIntroElem() {
 		const { options, targetElement } = this;
 
+		// 创建元素
 		const overlay = document.createElement('div');
 		const helperLayer = document.createElement('div');
-		// const tooltipReference = document.createElement('div');
-		overlay.setAttribute('class', 'intro-overlay');
-		helperLayer.setAttribute('class', 'intro-helperLayer');
+		const tooltipReferenceLayer = document.createElement('div');
+		const tooltipLayer = document.createElement('div');
+		const arrowLayer = document.createElement('div');
+		const textLayer = document.createElement('div');
+		// const bulletLayer = document.createElement('div');
 
-		// reset layers attr
+
+		// 给元素增加class
+		utils.addClass(overlay, 'intro-overlay');
+		utils.addClass(helperLayer, 'intro-helperLayer');
+		utils.addClass(tooltipReferenceLayer, 'intro-tooltipReferece');
+		utils.addClass(tooltipLayer, 'intro-tooltip');
+		utils.addClass(arrowLayer, 'intro-arrow');
+		utils.addClass(textLayer, 'intro-tooltipText');
+
+		// 内部元素的组合
+		utils.appendChild(tooltipLayer, arrowLayer);
+		utils.appendChild(tooltipLayer, textLayer);
+		utils.appendChild(tooltipReferenceLayer, tooltipLayer);
+
+		// 设置属性
 		overlay.style.opacity = options.overlayOpacity;
-		this._setLayerPositon(helperLayer);
 
-		// show intro element
-		this._toggleShowElem();
 
-		targetElement.appendChild(overlay);
-		targetElement.appendChild(helperLayer);
+		// 追加元素到document中
+		utils.appendChild(targetElement, overlay);
+		utils.appendChild(targetElement, helperLayer);
+		utils.appendChild(targetElement, tooltipReferenceLayer);
 
-		const self = this;
-		setTimeout(() => {
-			const helpeLayer = document.querySelector('.intro-helperLayer');
-			self.currentStep = 1;
-			self._toggleShowElem();
-			self._setLayerPositon(helpeLayer);
-		}, 1000);
+		this.helperLayer = helperLayer;
+		this.tooltipReferenceLayer = tooltipReferenceLayer;
 	}
 
 	/**
-	 * 设置layer的位置
-	 * @param {*} layer
+	 * 设置helper和tooltipReferenceLayer的位置
 	 */
-	_setLayerPositon(layer) {
-		const { introItems, options } = this;
+	_setMainLayerPositon() {
+		const {
+			introItems, options, helperLayer, tooltipReferenceLayer
+		} = this;
 		const currentElem = introItems[this.currentStep].elem;
 		const elemPostition = utils.getOffset(currentElem);
 
-		layer.style.left = `${elemPostition.left - (options.helperElementPadding / 2)}px`;
-		layer.style.top = `${elemPostition.top - (options.helperElementPadding / 2)}px`;
-		layer.style.width = `${elemPostition.width + options.helperElementPadding}px`;
-		layer.style.height = `${elemPostition.height + options.helperElementPadding}px`;
+		helperLayer.style.left = `${elemPostition.left - (options.helperElementPadding / 2)}px`;
+		helperLayer.style.top = `${elemPostition.top - (options.helperElementPadding / 2)}px`;
+		helperLayer.style.width = `${elemPostition.width + options.helperElementPadding}px`;
+		helperLayer.style.height = `${elemPostition.height + options.helperElementPadding}px`;
+
+		tooltipReferenceLayer.style.left = `${elemPostition.left - (options.helperElementPadding / 2)}px`;
+		tooltipReferenceLayer.style.top = `${elemPostition.top - (options.helperElementPadding / 2)}px`;
+		tooltipReferenceLayer.style.width = `${elemPostition.width + options.helperElementPadding}px`;
+		tooltipReferenceLayer.style.height = `${elemPostition.height + options.helperElementPadding}px`;
 	}
+
+	/**
+	 * 设置tooltip的位置
+	 * @param {Dom} tooltipLayer
+	 */
+	_setTooltipLayerPosition() {
+		const { options, tooltipReferenceLayer, introItems } = this;
+		const { tooltipPosition } = options;
+		const currentElem = introItems[this.currentStep].elem;
+		const elemPostition = utils.getOffset(currentElem);
+
+		const tooltipLayer = utils.querySelector(tooltipReferenceLayer, '.intro-tooltip', true);
+		const arrowLayer = utils.querySelector(tooltipLayer, '.intro-arrow', true);
+
+		let left;
+		let top;
+		const offset = 10;
+
+		switch (tooltipPosition) {
+		case 'bottom':
+			left = '0px';
+			top = `${elemPostition.height + options.helperElementPadding + offset}px`;
+			utils.addClass(arrowLayer, 'top');
+			break;
+		case 'top':
+			break;
+		case 'left':
+			break;
+		case 'right':
+			break;
+		default:
+			left = '0px';
+			top = `${elemPostition.height + options.helperElementPadding + offset}px`;
+			break;
+		}
+
+		tooltipLayer.style.left = left;
+		tooltipLayer.style.top = top;
+	}
+
+	/**
+	 * 设置tooltip中的内容，包括当前文字，当前指示灯等
+	 */
+	_setTooltipLayerContent() {
+		const { tooltipReferenceLayer, intros } = this;
+		const textLayer = utils.querySelector(tooltipReferenceLayer, '.intro-tooltipText', true);
+		const currentText = intros[this.currentStep + 1];
+
+		console.log('textLayer', textLayer);
+		textLayer.innerText = String(currentText);
+	}
+
+	/**
+	 * 展现tooltipLayer 并可以延时执行
+	 * @param {Number} delay 延时执行时间
+	 */
+	_showTooltipLayer(delay) {
+		const { tooltipReferenceLayer } = this;
+		const tooltipLayer = utils.querySelector(tooltipReferenceLayer, '.intro-tooltip', true);
+
+		if (delay && utils.isNumber(delay) && delay > 0) {
+			utils.delay(() => {
+				utils.addClass(tooltipLayer, 'show');
+			}, delay);
+		} else {
+			utils.addClass(tooltipLayer, 'show');
+		}
+	}
+
+	/**
+	 * 隐藏tooltipLayer 并可以延时执行
+	 * @param {Number} delay 延时执行时间
+	 */
+	_hideTooltipLayer(delay) {
+		const { tooltipReferenceLayer } = this;
+		const tooltipLayer = utils.querySelector(tooltipReferenceLayer, '.intro-tooltip', true);
+
+		if (delay && utils.isNumber(delay) && delay > 0) {
+			utils.delay(() => {
+				utils.removeClass(tooltipLayer, 'show');
+			}, delay);
+		} else {
+			utils.removeClass(tooltipLayer, 'show');
+		}
+	}
+
 
 	/**
 	 * 转换元素的显示状态，即是否需要改变引导元素的z-index
 	 */
 	_toggleShowElem() {
-		const {introItems, currentStep} = this;
+		const { introItems, currentStep } = this;
 		const lastElem = introItems[currentStep - 1] && introItems[currentStep - 1].elem;
 		const currentElem = introItems[currentStep].elem;
 

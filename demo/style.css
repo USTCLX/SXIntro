@@ -31,7 +31,54 @@
 	transition: all 0.3s ease-out;
 }
 
-.intro-showElement,tr.intro-showElement>td,tr.intro-showElement>th{
+.intro-tooltipReferece {
+	box-sizing: content-box;
+	position: absolute;
+	visibility: hidden;
+	z-index: 1000000000;
+	background-color: transparent;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+.intro-tooltip {
+	box-sizing: content-box;
+	position: absolute;
+	visibility: visible;
+	padding: 10px;
+	background-color: #FFF;
+	min-width: 200px;
+	max-width: 300px;
+	border-radius: 3px;
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+	opacity: 0;
+	-webkit-transition: opacity 0.1s ease-out;
+	-moz-transition: opacity 0.1s ease-out;
+	-ms-transition: opacity 0.1s ease-out;
+	-o-transition: opacity 0.1s ease-out;
+	transition: opacity 0.1s ease-out
+}
+
+.intro-tooltip.show{
+	opacity: 1;
+}
+
+.intro-arrow{
+	content:'';
+	border:5px solid transparent;
+	position: absolute;
+}
+
+.intro-arrow.top{
+	top:-10px;
+	border-bottom-color:#FFF;
+}
+
+.intro-showElement, tr.intro-showElement>td, tr.intro-showElement>th {
 	z-index: 9999999 !important;
 	position: relative;
 }

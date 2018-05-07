@@ -178,6 +178,24 @@ function removeClass(elem, klass) {
 	}
 }
 
+/**
+ * 向元素中追加子元素
+ * @param {DOM} parent 父元素
+ * @param {DOM} child 子元素
+ */
+function appendChild(parent, child) {
+	parent.appendChild(child);
+}
+
+/**
+ * 延时执行函数
+ * @param {function} fn 函数
+ * @param {延迟时间} time
+ */
+function delay(fn, time) {
+	window.setTimeout(fn, time);
+}
+
 export default {
 	deepClone,
 	getEleById,
@@ -190,6 +208,8 @@ export default {
 	getAttribute,
 	getOffset,
 	addClass,
-	removeClass
+	removeClass,
+	appendChild,
+	delay
 };
 

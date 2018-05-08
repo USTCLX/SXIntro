@@ -4,6 +4,7 @@
  */
 
 import utils from './utils';
+import './style.css';
 
 class SXIntro {
 	constructor(id) {

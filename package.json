@@ -9,7 +9,9 @@
     "build": "webpack --mode=production",
     "lint": "eslint --fix --cache --ext  .js src"
   },
-  "pre-commit":["lint"],  
+  "pre-commit": [
+    "lint"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/USTCLX/SXIntro.git"
@@ -25,10 +27,12 @@
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.11.0",
     "pre-commit": "^1.2.2",
+    "style-loader": "^0.21.0",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.1.2"
   },

@@ -153,29 +153,44 @@ function getOffset(elem) {
 
 /**
  * 为Dom元素增加Class
- * @param {DOM} elem
- * @param {String} klass
  */
-function addClass(elem, klass) {
-	const currentKlass = elem.className;
-	const klsReg = new RegExp(klass, 'ig');
-	if (!klsReg.test(currentKlass)) {
-		elem.className = `${currentKlass} ${klass}`;
+function addClass(...args) {
+	if (args.length < 2) {
+		return;
 	}
+	const elem = args[0];
+	let currentKlass = elem.className;
+	let klass;
+	let klsReg;
+	for (let i = 1, il = args.length; i < il; i++) {
+		klass = args[i];
+		klsReg = new RegExp(klass, 'ig');
+		if (!klsReg.test(currentKlass)) {
+			currentKlass += ` ${klass}`;
+		}
+	}
+	elem.className = currentKlass;
 }
 
 /**
  * 为Dom元素删除Class
- * @param {DOM} elem
- * @param {String} klass
  */
-function removeClass(elem, klass) {
-	let currentKlass = elem.className;
-	const klsReg = new RegExp(klass, 'ig');
-	if (klsReg.test(currentKlass)) {
-		currentKlass = currentKlass.replace(klass, '');
-		elem.className = currentKlass;
+function removeClass(...args) {
+	if (args.length < 2) {
+		return;
 	}
+	const elem = args[0];
+	let currentKlass = elem.className;
+	let klass;
+	let klsReg;
+	for (let i = 1, il = args.length; i < il; i++) {
+		klass = args[i];
+		klsReg = new RegExp(klass, 'ig');
+		if (klsReg.test(currentKlass)) {
+			currentKlass = currentKlass.replace(klass, '');
+		}
+	}
+	elem.className = currentKlass;
 }
 
 /**
@@ -183,8 +198,14 @@ function removeClass(elem, klass) {
  * @param {DOM} parent 父元素
  * @param {DOM} child 子元素
  */
-function appendChild(parent, child) {
-	parent.appendChild(child);
+function appendChild(...args) {
+	const parent = args[0];
+	if (args.length < 2) {
+		return;
+	}
+	for (let i = 1, il = args.length; i < il; i++) {
+		parent.appendChild(args[i]);
+	}
 }
 
 /**
@@ -194,6 +215,32 @@ function appendChild(parent, child) {
  */
 function delay(fn, time) {
 	window.setTimeout(fn, time);
+}
+
+/**
+ * 为Dom元素增加属性
+ * @param {参数} args
+ */
+function setAttribute(...args) {
+	if (args.length < 3) {
+		return;
+	}
+	const elem = args[0];
+	const attr = args[1];
+	const value = args[2];
+	elem.setAttribute(attr, value);
+}
+
+/**
+ * 为Dom元素删除属性
+ * @param {参数} args
+ */
+function removeAttribute(...args) {
+	if (args.length < 2) {
+		return;
+	}
+	const elem = args[0];
+	elem.removeAttribute(args[1]);
 }
 
 export default {
@@ -210,6 +257,8 @@ export default {
 	addClass,
 	removeClass,
 	appendChild,
-	delay
+	delay,
+	setAttribute,
+	removeAttribute
 };
 

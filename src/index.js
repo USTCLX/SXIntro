@@ -7,13 +7,14 @@ import utils from './utils';
 
 class SXIntro {
 	constructor(id) {
+		this.id = id;
 		this.targetElement = null;
 		this.introItems = [];
 		this.options = {
-			nextLabel: '下一步 &rarr;',
-			prevLabel: '上一步 &larr;',
+			nextLabel: '下一步',
+			prevLabel: '上一步',
 			skipLabel: '跳过',
-			donwLabel: '完成',
+			finishLabel: '完成',
 			tooltipPosition: 'bottom',
 			overlayOpacity: 0.8,
 			helperElementPadding: 10
@@ -24,15 +25,7 @@ class SXIntro {
 
 		this.helperLayer = null;
 		this.tooltipReferenceLayer = null;
-
-		// 设置根元素
-		this._getTargetElem(id);
-
-		// 设置需要导航的元素
-		this._getIntroItems('*[data-step]');
-
-		// 监听窗口事件
-		// this._linstenEvent();
+		this.overlay = null;
 
 		return this;
 	}
@@ -60,33 +53,19 @@ class SXIntro {
    * 开始启动引导
    */
 	start() {
-		if (!this.initIntroElem) {
-			// 创建元素
-			this._createIntroElem();
-		} else {
-			console.log('aha');
-		}
-
-		// 提高被引导元素的z-index
-		this._toggleShowElem();
-		this._setMainLayerPositon();
-		this._setTooltipLayerPosition();
-		this._setTooltipLayerContent();
-		this._showTooltipLayer(300);
-		const self = this;
-		utils.delay(() => {
-			self.currentStep++;
-			self._hideTooltipLayer();
-			self._toggleShowElem();
-			self._setMainLayerPositon();
-			self._setTooltipLayerPosition();
-			self._setTooltipLayerContent();
-			self._showTooltipLayer(300);
-		}, 1000);
+		// 设置根元素
+		this._getTargetElem(this.id);
+		// 设置需要导航的元素
+		this._getIntroItems('*[data-step]');
+		// 创建元素
+		this._createIntroElem();
+		// 监听事件
+		this._addEventListener();
+		// 第一步
+		this._step(0);
 
 		return this;
 	}
-
 
 	/**
    * 获取targetElem
@@ -117,6 +96,8 @@ class SXIntro {
 			});
 		}
 		this.introItems.sort((a, b) => a.step - b.step);
+
+		this.totalSteps = this.introItems.length;
 	}
 
 	/**
@@ -133,24 +114,34 @@ class SXIntro {
 		const arrowLayer = document.createElement('div');
 		const textLayer = document.createElement('div');
 		// const bulletLayer = document.createElement('div');
+		const buttonLayer = document.createElement('div');
+		const button1 = document.createElement('button'); // 跳过、完成按钮
+		const button2 = document.createElement('button'); // 上一步按钮
+		const button3 = document.createElement('button'); // 下一步按钮
 
+
+		// 设置属性
+		overlay.style.opacity = options.overlayOpacity;
+		button1.innerHTML = options.skipLabel;
+		button2.innerHTML = options.prevLabel;
+		button3.innerHTML = options.nextLabel;
 
 		// 给元素增加class
-		utils.addClass(overlay, 'intro-overlay');
+		utils.addClass(overlay, 'intro-overlay', 'show');
 		utils.addClass(helperLayer, 'intro-helperLayer');
 		utils.addClass(tooltipReferenceLayer, 'intro-tooltipReferece');
 		utils.addClass(tooltipLayer, 'intro-tooltip');
 		utils.addClass(arrowLayer, 'intro-arrow');
 		utils.addClass(textLayer, 'intro-tooltipText');
+		utils.addClass(buttonLayer, 'intro-tooltipButtons');
+		utils.addClass(button1, 'intro-button');
+		utils.addClass(button2, 'intro-button');
+		utils.addClass(button3, 'intro-button');
 
 		// 内部元素的组合
-		utils.appendChild(tooltipLayer, arrowLayer);
-		utils.appendChild(tooltipLayer, textLayer);
+		utils.appendChild(buttonLayer, button1, button2, button3);
+		utils.appendChild(tooltipLayer, arrowLayer, textLayer, buttonLayer);
 		utils.appendChild(tooltipReferenceLayer, tooltipLayer);
-
-		// 设置属性
-		overlay.style.opacity = options.overlayOpacity;
-
 
 		// 追加元素到document中
 		utils.appendChild(targetElement, overlay);
@@ -159,6 +150,20 @@ class SXIntro {
 
 		this.helperLayer = helperLayer;
 		this.tooltipReferenceLayer = tooltipReferenceLayer;
+		this.overlay = overlay;
+		this.initIntroElem = true;
+	}
+
+	_addEventListener() {
+		const { tooltipReferenceLayer } = this;
+		const buttons = utils.querySelector(tooltipReferenceLayer, '.intro-button');
+		if (buttons.length !== 3) {
+			return;
+		}
+		const [skipBtn, preBtn, nextBtn] = buttons;
+		skipBtn.addEventListener('click', this._done.bind(this));
+		preBtn.addEventListener('click', this._step.bind(this, -1));
+		nextBtn.addEventListener('click', this._step.bind(this, 1));
 	}
 
 	/**
@@ -229,7 +234,6 @@ class SXIntro {
 		const textLayer = utils.querySelector(tooltipReferenceLayer, '.intro-tooltipText', true);
 		const currentText = intros[this.currentStep + 1];
 
-		console.log('textLayer', textLayer);
 		textLayer.innerText = String(currentText);
 	}
 
@@ -282,6 +286,97 @@ class SXIntro {
 		if (currentElem) {
 			utils.addClass(currentElem, 'intro-showElement');
 		}
+	}
+
+	/**
+	 * 改变三个按钮的状态
+	 */
+	_changeButtonsStatus() {
+		const { currentStep, totalSteps, options } = this;
+		const buttons = utils.querySelector(this.tooltipReferenceLayer, '.intro-button');
+		if (buttons.length !== 3) {
+			throw new Error('buttons num is wrong!');
+		}
+		const [skipBtn, preBtn, nextBtn] = buttons;
+
+		utils.removeClass(preBtn, 'intro-disabled');
+		utils.removeAttribute(preBtn, 'disabled');
+		utils.removeClass(nextBtn, 'intro-disabled');
+		utils.removeAttribute(nextBtn, 'disabled');
+		if (currentStep === 0) {
+			// first step
+			preBtn.setAttribute('disabled', 'disabled');
+			utils.addClass(preBtn, 'intro-disabled');
+		} else if (currentStep === (totalSteps - 1)) {
+			// last step
+			nextBtn.setAttribute('disabled', 'disabled');
+			utils.addClass(nextBtn, 'intro-disabled');
+
+			skipBtn.innerText = options.finishLabel;
+		}
+	}
+
+	/**
+	 * 执行一步
+	 * @param {Number} id 0 currentStep不动，1 currentStep加1, -1 currentStep减1
+	 */
+	_step(id) {
+		switch (id) {
+		case 0:
+			break;
+		case 1:
+			if (this.currentStep < (this.totalSteps - 1)) {
+				this.currentStep++;
+				this._hideTooltipLayer();
+			}
+			break;
+		case -1:
+			if (this.currentStep > 0) {
+				this.currentStep--;
+				this._hideTooltipLayer();
+			}
+			break;
+		default:
+			break;
+		}
+
+		utils.delay(() => {
+			this._toggleShowElem();
+			this._setMainLayerPositon();
+			this._setTooltipLayerPosition();
+			this._setTooltipLayerContent();
+			this._showTooltipLayer(300);
+			this._changeButtonsStatus();
+		}, 100);
+	}
+
+	/**
+	 * 完成
+	 * 需要做一些内存回收等的处理
+	 */
+	_done() {
+		const {
+			introItems, currentStep, overlay, helperLayer, tooltipReferenceLayer
+		} = this;
+
+		// recovery
+		utils.removeClass(introItems[currentStep].elem, 'intro-showElement');
+
+		// hide
+		utils.removeClass(overlay, 'show');
+		this._hideTooltipLayer();
+
+		// destory element
+		overlay.remove();
+		helperLayer.remove();
+		tooltipReferenceLayer.remove();
+
+
+		// destory
+		this.initIntroElem = false;
+		this.currentStep = 0;
+		this.totalSteps = 0;
+		this.introItems = [];
 	}
 }
 

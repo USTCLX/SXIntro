@@ -310,17 +310,26 @@ class SXIntro {
 
 	/**
 	 * 转换元素的显示状态，即是否需要改变引导元素的z-index
+	 * @param{number} delay 延迟
 	 */
-	_toggleShowElem() {
+	_toggleShowElem(delay) {
 		const { introItems, currentStep } = this;
 		const lastElem = introItems[this.lastStep].elem;
 		const currentElem = introItems[currentStep].elem;
 
-		if (lastElem) {
-			utils.removeClass(lastElem, 'intro-showElement');
-		}
-		if (currentElem) {
-			utils.addClass(currentElem, 'intro-showElement');
+		const toggle = () => {
+			if (lastElem) {
+				utils.removeClass(lastElem, 'intro-showElement');
+			}
+			if (currentElem) {
+				utils.addClass(currentElem, 'intro-showElement');
+			}
+		};
+
+		if (delay) {
+			utils.delay(toggle, delay);
+		} else {
+			toggle();
 		}
 	}
 
@@ -388,8 +397,8 @@ class SXIntro {
 		}
 
 		utils.delay(() => {
-			this._toggleShowElem();
 			this._setMainLayerPositon();
+			this._toggleShowElem();
 			this._setTooltipLayerPosition();
 			this._setTooltipLayerContent();
 			this._changeBulletsStatus();

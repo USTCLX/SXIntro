@@ -37,10 +37,10 @@ class SXIntro {
    * @param {arry} intros {1:'第一步：这里是XXX'，2:'第二步:这里是XXX'}
    */
 	setIntro(intros) {
-		if (utils.isObject(intros)) {
+		if (utils.isArray(intros)) {
 			this.intros = intros;
 		} else {
-			throw new Error('params must be a object');
+			throw new Error('params must be a array');
 		}
 		const self = this;
 		this.introItems.forEach((item, index) => {
@@ -176,6 +176,14 @@ class SXIntro {
 		} = this;
 		const currentElem = introItems[this.currentStep].elem;
 		const elemPostition = utils.getOffset(currentElem);
+		const elemProp = utils.getCSSProp(currentElem, 'position');
+		if (elemProp === 'fixed') {
+			utils.addClass(helperLayer, 'intro-fixed');
+			utils.addClass(tooltipReferenceLayer, 'intro-fixed');
+		} else {
+			utils.removeClass(helperLayer, 'intro-fixed');
+			utils.removeClass(tooltipReferenceLayer, 'intro-fixed');
+		}
 
 		helperLayer.style.left = `${elemPostition.left - (options.helperElementPadding / 2)}px`;
 		helperLayer.style.top = `${elemPostition.top - (options.helperElementPadding / 2)}px`;
@@ -193,8 +201,9 @@ class SXIntro {
 	 * @param {Dom} tooltipLayer
 	 */
 	_setTooltipLayerPosition() {
-		const { options, tooltipReferenceLayer, introItems } = this;
-		const { tooltipPosition } = options;
+		const {
+			options, tooltipReferenceLayer, introItems, currentStep, intros
+		} = this;
 		const currentElem = introItems[this.currentStep].elem;
 		const elemPostition = utils.getOffset(currentElem);
 
@@ -203,28 +212,40 @@ class SXIntro {
 
 		let left;
 		let top;
+		let bottom;
+		let right;
 		const offset = 10;
+		const tooltipPosition = intros[currentStep].position;
+
+		utils.removeClass(arrowLayer, 'bottom', 'top', 'right', 'left');
 
 		switch (tooltipPosition) {
 		case 'bottom':
-			left = '0px';
 			top = `${elemPostition.height + options.helperElementPadding + offset}px`;
 			utils.addClass(arrowLayer, 'top');
 			break;
 		case 'top':
+			bottom = `${elemPostition.height + options.helperElementPadding + offset}px`;
+			utils.addClass(arrowLayer, 'bottom');
 			break;
 		case 'left':
+			right = `${elemPostition.width + options.helperElementPadding + offset}px`;
+			utils.addClass(arrowLayer, 'right');
 			break;
 		case 'right':
+			left = `${elemPostition.width + options.helperElementPadding + offset}px`;
+			utils.addClass(arrowLayer, 'left');
 			break;
 		default:
-			left = '0px';
+			// bottom
 			top = `${elemPostition.height + options.helperElementPadding + offset}px`;
 			break;
 		}
 
-		tooltipLayer.style.left = left;
-		tooltipLayer.style.top = top;
+		tooltipLayer.style.left = (left === undefined) ? '' : left;
+		tooltipLayer.style.top = (top === undefined) ? '' : top;
+		tooltipLayer.style.bottom = (bottom === undefined) ? '' : bottom;
+		tooltipLayer.style.right = (right === undefined) ? '' : right;
 	}
 
 	/**
@@ -233,9 +254,9 @@ class SXIntro {
 	_setTooltipLayerContent() {
 		const { tooltipReferenceLayer, intros } = this;
 		const textLayer = utils.querySelector(tooltipReferenceLayer, '.intro-tooltipText', true);
-		const currentText = intros[this.currentStep + 1];
+		const currentText = intros[this.currentStep].tooltip;
 
-		textLayer.innerText = String(currentText);
+		textLayer.innerText = String(currentText || '');
 	}
 
 	/**
@@ -312,7 +333,6 @@ class SXIntro {
 			// last step
 			nextBtn.setAttribute('disabled', 'disabled');
 			utils.addClass(nextBtn, 'intro-disabled');
-
 			skipBtn.innerText = options.finishLabel;
 		}
 	}
@@ -371,7 +391,6 @@ class SXIntro {
 		overlay.remove();
 		helperLayer.remove();
 		tooltipReferenceLayer.remove();
-
 
 		// destory
 		this.initIntroElem = false;

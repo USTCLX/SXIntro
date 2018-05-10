@@ -1,3 +1,4 @@
+
 /* 引导元素样式 */
 
 .intro-showElement, tr.intro-showElement>td, tr.intro-showElement>th {
@@ -52,6 +53,10 @@
 	transition: all 0.3s ease-out;
 }
 
+.intro-helperLayer.intro-fixed{
+	position: fixed;
+}
+
 /* 引导对话框样式 */
 
 /* 定位层 */
@@ -68,6 +73,10 @@
 	-ms-transition: all 0.3s ease-out;
 	-o-transition: all 0.3s ease-out;
 	transition: all 0.3s ease-out;
+}
+
+.intro-tooltipReferece.intro-fixed{
+	position: fixed;
 }
 
 /* 对话框层 */
@@ -120,6 +129,12 @@
 	border-bottom-color: #FFF;
 }
 
+.intro-arrow.bottom{
+	left:10px;
+	bottom:-10px;
+	border-top-color: #FFF;
+}
+
 .intro-arrow.right {
 	top: 10px;
 	right: -10px;
@@ -130,6 +145,12 @@
 	top: 50%;
 	right: -10px;
 	border-left-color: #FFF;
+}
+
+.inrtro-arrow.left{
+	top:10px;
+	right:-10px;
+	border-right-color: #FFF;
 }
 
 /* bullets */

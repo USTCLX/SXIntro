@@ -1,3 +1,4 @@
+
 /**
  * 工具库
  * create on 2018/5/3 by lixiang
@@ -147,7 +148,9 @@ function getOffset(elem) {
 		top: rect.top + scrollTop,
 		left: rect.left + scrollLeft,
 		width: rect.width,
-		height: rect.height
+		height: rect.height,
+		right: rect.right,
+		bottom: rect.left
 	};
 }
 
@@ -243,6 +246,15 @@ function removeAttribute(...args) {
 	elem.removeAttribute(args[1]);
 }
 
+/**
+ * 获取元素的css属性
+ * @param {Domain} elem Dom元素
+ * @param {string} prop 属性字符串 如 'position'
+ */
+function getCSSProp(elem, prop) {
+	return window.getComputedStyle(elem, null).getPropertyValue(prop);
+}
+
 export default {
 	deepClone,
 	getEleById,
@@ -259,6 +271,7 @@ export default {
 	appendChild,
 	delay,
 	setAttribute,
-	removeAttribute
+	removeAttribute,
+	getCSSProp
 };
 

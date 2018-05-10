@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,18 @@
 	<script>
 		window.onload = function () {
 			let intro = new SXIntro()
-				.setIntro({ 1: '你好', 2: '欢迎' })
+				.setIntro([
+					{
+						tooltip:'你好',
+						position:'bottom'
+					},{
+						tooltip:'这是一段导航',
+						position:'bottom'
+					},{
+						tooltip:'这是fix元素',
+						position:'top'
+					}
+				])
 				.start();
 		}
 	</script>
@@ -24,6 +36,10 @@
 		<p>
 			这是一个段落，导航将跳往这里
 		</p>
+	</div>
+
+	<div data-step="3" style="position: fixed;bottom:0px">
+		<p>这是一个新的段落，使用了fixed定位</p>
 	</div>
 </body>
 

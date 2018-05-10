@@ -22,5 +22,5 @@
 ```
 
 
-##Demo
+## Demo
 https://ustclx.github.io/SXIntro/demo/demo.html

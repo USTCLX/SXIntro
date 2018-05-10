@@ -147,9 +147,9 @@
 	border-left-color: #FFF;
 }
 
-.inrtro-arrow.left{
+.intro-arrow.left {
 	top:10px;
-	right:-10px;
+	left:-10px;
 	border-right-color: #FFF;
 }
 

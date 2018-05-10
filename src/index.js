@@ -23,6 +23,7 @@ class SXIntro {
 		this.intros = [];
 		this.initIntroElem = false;
 		this.currentStep = 0;
+		this.lastStep = 0;
 
 		this.helperLayer = null;
 		this.tooltipReferenceLayer = null;
@@ -307,13 +308,12 @@ class SXIntro {
 		}
 	}
 
-
 	/**
 	 * 转换元素的显示状态，即是否需要改变引导元素的z-index
 	 */
 	_toggleShowElem() {
 		const { introItems, currentStep } = this;
-		const lastElem = introItems[currentStep - 1] && introItems[currentStep - 1].elem;
+		const lastElem = introItems[this.lastStep].elem;
 		const currentElem = introItems[currentStep].elem;
 
 		if (lastElem) {
@@ -367,15 +367,18 @@ class SXIntro {
 	_step(id) {
 		switch (id) {
 		case 0:
+			this.lastStep = this.currentStep;
 			break;
 		case 1:
 			if (this.currentStep < (this.totalSteps - 1)) {
+				this.lastStep = this.currentStep;
 				this.currentStep++;
 				this._hideTooltipLayer();
 			}
 			break;
 		case -1:
 			if (this.currentStep > 0) {
+				this.lastStep = this.currentStep;
 				this.currentStep--;
 				this._hideTooltipLayer();
 			}

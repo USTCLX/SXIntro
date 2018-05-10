@@ -154,6 +154,38 @@
 }
 
 /* bullets */
+.intro-tooltipBullets{
+	text-align: center;
+}
+
+.intro-tooltipBullets ul{
+	box-sizing: content-box;
+	clear: both;
+	margin: 15px auto 0;
+	padding: 0;
+	display: inline-block;
+}
+
+.intro-tooltipBullets ul li{
+	box-sizing: content-box;
+	list-style: none;
+	float: left;
+	margin:0 2px;
+}
+.intro-tooltipBullets ul li a{
+	box-sizing: content-box;
+	display: block;
+	width: 6px;
+	height:6px;
+	background: #ccc;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	text-decoration: none;
+}
+.intro-tooltipBullets ul li a.active{
+	background-color: #999;
+}
 
 /* buttons */
 

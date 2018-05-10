@@ -172,6 +172,7 @@ function addClass(...args) {
 			currentKlass += ` ${klass}`;
 		}
 	}
+	currentKlass.replace('top', ' '); // 去除中间的多于空格
 	elem.className = currentKlass;
 }
 
@@ -188,9 +189,9 @@ function removeClass(...args) {
 	let klsReg;
 	for (let i = 1, il = args.length; i < il; i++) {
 		klass = args[i];
-		klsReg = new RegExp(klass, 'ig');
+		klsReg = new RegExp(`\\s+${klass}`, 'ig');
 		if (klsReg.test(currentKlass)) {
-			currentKlass = currentKlass.replace(klass, '');
+			currentKlass = currentKlass.replace(klsReg, '');
 		}
 	}
 	elem.className = currentKlass;

@@ -105,20 +105,28 @@ class SXIntro {
 	 * 创建导航元素
 	 */
 	_createIntroElem() {
-		const { options, targetElement } = this;
-
+		const { options, targetElement, introItems} = this;
+		const itemsLength = introItems.length;
 		// 创建元素
-		const overlay = document.createElement('div');
-		const helperLayer = document.createElement('div');
-		const tooltipReferenceLayer = document.createElement('div');
-		const tooltipLayer = document.createElement('div');
-		const arrowLayer = document.createElement('div');
-		const textLayer = document.createElement('div');
-		// const bulletLayer = document.createElement('div');
-		const buttonLayer = document.createElement('div');
+		const overlay = document.createElement('div'); // 遮罩层
+		const helperLayer = document.createElement('div');// 高亮层
+		const tooltipReferenceLayer = document.createElement('div');// 引导定位层
+		const tooltipLayer = document.createElement('div');// 引导层
+		const arrowLayer = document.createElement('div');// 对话框箭头
+		const textLayer = document.createElement('div');// 对话框文字
+		const bulletLayer = document.createElement('div');// 子弹进度层
+		const bulletUlLayer = document.createElement('ul');// ul列表
+		const buttonLayer = document.createElement('div');// 按钮层
 		const button1 = document.createElement('button'); // 跳过、完成按钮
 		const button2 = document.createElement('button'); // 上一步按钮
 		const button3 = document.createElement('button'); // 下一步按钮
+
+		const liElems = [];
+		const aElems = [];
+		for (let i = 0; i < itemsLength; i++) {
+			liElems[i] = document.createElement('li');
+			aElems[i] = document.createElement('a');
+		}
 
 
 		// 设置属性
@@ -134,14 +142,20 @@ class SXIntro {
 		utils.addClass(tooltipLayer, 'intro-tooltip');
 		utils.addClass(arrowLayer, 'intro-arrow');
 		utils.addClass(textLayer, 'intro-tooltipText');
+		utils.addClass(bulletLayer, 'intro-tooltipBullets');
 		utils.addClass(buttonLayer, 'intro-tooltipButtons');
 		utils.addClass(button1, 'intro-button');
 		utils.addClass(button2, 'intro-button');
 		utils.addClass(button3, 'intro-button');
 
 		// 内部元素的组合
+		for (let i = 0; i < itemsLength; i++) {
+			utils.appendChild(liElems[i], aElems[i]);
+			utils.appendChild(bulletUlLayer, liElems[i]);
+		}
+		utils.appendChild(bulletLayer, bulletUlLayer);
 		utils.appendChild(buttonLayer, button1, button2, button3);
-		utils.appendChild(tooltipLayer, arrowLayer, textLayer, buttonLayer);
+		utils.appendChild(tooltipLayer, arrowLayer, textLayer, bulletLayer, buttonLayer);
 		utils.appendChild(tooltipReferenceLayer, tooltipLayer);
 
 		// 追加元素到document中
@@ -310,6 +324,15 @@ class SXIntro {
 		}
 	}
 
+	_changeBulletsStatus() {
+		const {currentStep, tooltipReferenceLayer} = this;
+		const aElems = utils.querySelector(tooltipReferenceLayer, 'a');
+		aElems.forEach((aElem) => {
+			utils.removeClass(aElem, 'active');
+		});
+		utils.addClass(aElems[currentStep], 'active');
+	}
+
 	/**
 	 * 改变三个按钮的状态
 	 */
@@ -366,8 +389,9 @@ class SXIntro {
 			this._setMainLayerPositon();
 			this._setTooltipLayerPosition();
 			this._setTooltipLayerContent();
-			this._showTooltipLayer(300);
+			this._changeBulletsStatus();
 			this._changeButtonsStatus();
+			this._showTooltipLayer(300);
 		}, 100);
 	}
 

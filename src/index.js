@@ -271,7 +271,7 @@ class SXIntro {
 		const textLayer = utils.querySelector(tooltipReferenceLayer, '.intro-tooltipText', true);
 		const currentText = intros[this.currentStep].tooltip;
 
-		textLayer.innerText = String(currentText || '');
+		textLayer.innerHTML = String(currentText || '');
 	}
 
 	/**

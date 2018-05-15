@@ -9,6 +9,7 @@ module.exports = {
 		libraryExport: 'default',
 		libraryTarget: 'umd'
 	},
+	devtool: 'inline-source-map',
 	module: {
 		rules: [
 			{

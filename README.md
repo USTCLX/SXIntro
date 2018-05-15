@@ -1,6 +1,8 @@
 # SXIntro
 ## 特点
 1、体积小，只有24kb
+2、不依赖其他库
+3、使用也很简单，没有过多的配置项
 
 
 ## 使用方式
@@ -18,3 +20,7 @@
  ])
  .start()
 ```
+
+
+## Demo
+https://ustclx.github.io/SXIntro/demo/demo.html

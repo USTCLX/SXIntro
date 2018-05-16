@@ -7,7 +7,7 @@ import utils from './utils';
 import './style.css';
 
 class SXIntro {
-	constructor(id) {
+	constructor(id, opts) {
 		this.id = id;
 		this.targetElement = null;
 		this.introItems = [];
@@ -28,6 +28,13 @@ class SXIntro {
 		this.helperLayer = null;
 		this.tooltipReferenceLayer = null;
 		this.overlay = null;
+
+		if (opts) {
+			const keys = Object.keys(this.options);
+			keys.forEach((key) => {
+				this.options[key] = opts[key];
+			});
+		}
 
 		return this;
 	}
@@ -106,7 +113,7 @@ class SXIntro {
 	 * 创建导航元素
 	 */
 	_createIntroElem() {
-		const { options, targetElement, introItems} = this;
+		const { options, targetElement, introItems } = this;
 		const itemsLength = introItems.length;
 		// 创建元素
 		const overlay = document.createElement('div'); // 遮罩层
@@ -334,7 +341,7 @@ class SXIntro {
 	}
 
 	_changeBulletsStatus() {
-		const {currentStep, tooltipReferenceLayer} = this;
+		const { currentStep, tooltipReferenceLayer } = this;
 		const aElems = utils.querySelector(tooltipReferenceLayer, 'a');
 		aElems.forEach((aElem) => {
 			utils.removeClass(aElem, 'active');

@@ -16,6 +16,9 @@ class SXIntro {
 			prevLabel: '上一步',
 			skipLabel: '跳过',
 			finishLabel: '完成',
+			nextLabelHide: false,
+			prevLabelHide: false,
+			skipLabelHide: false,
 			tooltipPosition: 'bottom',
 			overlayOpacity: 0.8,
 			helperElementPadding: 10
@@ -94,14 +97,16 @@ class SXIntro {
 	 */
 	_getIntroItems(selector) {
 		const tempIntroItems = utils.querySelector(this.targetElement, selector);
-		let step = 0;
 		this.introItems = [];
 		for (let i = 0, il = tempIntroItems.length; i < il; i++) {
-			step = parseInt(utils.getAttribute(tempIntroItems[i], 'data-step'), 10);
-			this.introItems.push({
-				elem: tempIntroItems[i],
-				intro: '',
-				step
+			const elem = tempIntroItems[i];
+			const steps = utils.parseDataStep(elem);
+			steps.forEach((step) => {
+				this.introItems.push({
+					elem,
+					intro: '',
+					step
+				});
 			});
 		}
 		this.introItems.sort((a, b) => a.step - b.step);
@@ -155,6 +160,19 @@ class SXIntro {
 		utils.addClass(button1, 'intro-button');
 		utils.addClass(button2, 'intro-button');
 		utils.addClass(button3, 'intro-button');
+
+		if (options.skipLabelHide) {
+			utils.addClass(button1, 'hide');
+		}
+
+		if (options.prevLabelHide) {
+			utils.addClass(button2, 'hide');
+		}
+
+		if (options.nextLabelHide) {
+			utils.addClass(button3, 'hide');
+		}
+
 
 		// 内部元素的组合
 		for (let i = 0; i < itemsLength; i++) {

@@ -256,6 +256,16 @@ function getCSSProp(elem, prop) {
 	return window.getComputedStyle(elem, null).getPropertyValue(prop);
 }
 
+/**
+ * 解析dom中data-step数据
+ * @param {Domain} dom dom元素
+ */
+function parseDataStep(dom) {
+	const dataStep = getAttribute(dom, 'data-step');
+	const arr = dataStep.split('-');
+	return arr.map(item => parseInt(item, 10));
+}
+
 export default {
 	deepClone,
 	getEleById,
@@ -273,6 +283,7 @@ export default {
 	delay,
 	setAttribute,
 	removeAttribute,
-	getCSSProp
+	getCSSProp,
+	parseDataStep
 };
 

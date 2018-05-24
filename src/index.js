@@ -21,7 +21,8 @@ class SXIntro {
 			skipLabelHide: false,
 			tooltipPosition: 'bottom',
 			overlayOpacity: 0.8,
-			helperElementPadding: 10
+			helperElementPadding: 10,
+			flag: 'data-step'
 		};
 		this.intros = [];
 		this.initIntroElem = false;
@@ -68,13 +69,17 @@ class SXIntro {
 		// 设置根元素
 		this._getTargetElem(this.id);
 		// 设置需要导航的元素
-		this._getIntroItems('*[data-step]');
+		this._getIntroItems(`*[${this.options.flag}]`);
 		// 创建元素
 		this._createIntroElem();
 		// 监听事件
 		this._addEventListener();
 		// 第一步
-		this._step(0);
+		if (this.totalSteps) {
+			this._step(0);
+		} else {
+			this._done();
+		}
 
 		return this;
 	}
@@ -84,7 +89,7 @@ class SXIntro {
    * @param {string} id
    */
 	_getTargetElem(id) {
-		if (utils.isUndefined(id)) {
+		if (!id) {
 			this.targetElement = document.body;
 		} else if (utils.isString(id)) {
 			this.targetElement = utils.getEleById(id);
@@ -446,7 +451,9 @@ class SXIntro {
 		} = this;
 
 		// recovery
-		utils.removeClass(introItems[currentStep].elem, 'intro-showElement');
+		if (introItems && introItems.length !== 0) {
+			utils.removeClass(introItems[currentStep].elem, 'intro-showElement');
+		}
 
 		// hide
 		utils.removeClass(overlay, 'show');

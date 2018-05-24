@@ -10,7 +10,9 @@
 	<script src="../dist/SXIntro.bundle.js"></script>
 	<script>
 		window.onload = function () {
-			const intro = new SXIntro()
+			const intro = new SXIntro(null,{
+				flag:'data-haha'
+			})
 				.setIntro([
 					{	
 						index:1,

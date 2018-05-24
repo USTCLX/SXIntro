@@ -262,7 +262,7 @@ function getCSSProp(elem, prop) {
  */
 function parseDataStep(dom) {
 	const dataStep = getAttribute(dom, 'data-step');
-	const arr = dataStep.split('-');
+	const arr = (dataStep || '').split('-');
 	return arr.map(item => parseInt(item, 10));
 }
 

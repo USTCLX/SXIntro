@@ -102,11 +102,13 @@ class SXIntro {
 			const elem = tempIntroItems[i];
 			const steps = utils.parseDataStep(elem);
 			steps.forEach((step) => {
-				this.introItems.push({
-					elem,
-					intro: '',
-					step
-				});
+				if (utils.isNumber(step)) {
+					this.introItems.push({
+						elem,
+						intro: '',
+						step
+					});
+				}
 			});
 		}
 		this.introItems.sort((a, b) => a.step - b.step);

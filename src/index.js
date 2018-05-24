@@ -113,15 +113,17 @@ class SXIntro {
 		}
 		this.introItems.sort((a, b) => a.step - b.step);
 
-		this.totalSteps = this.introItems.length;
+		this.totalSteps = Math.min(this.introItems.length, this.intros.length);
 	}
 
 	/**
 	 * 创建导航元素
 	 */
 	_createIntroElem() {
-		const { options, targetElement, introItems } = this;
-		const itemsLength = introItems.length;
+		const {
+			options, targetElement, intros, introItems
+		} = this;
+		const itemsLength = Math.min(intros.length, introItems.length);
 		// 创建元素
 		const overlay = document.createElement('div'); // 遮罩层
 		const helperLayer = document.createElement('div');// 高亮层

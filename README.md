@@ -73,6 +73,16 @@ const intro = new SXIntro()
   .start();
 ```
 
+## API
+
+### SXIntro（id,options） 构造函数
+
+| 名称   |      类型      |  默认值 | 描述 |
+|----------|:-------------|------:|:------|
+| id |  string |  |  id元素选择符 |
+| options.flag |    string   |   'data-step' | 标识符，可以自定义 |
+
+
 
 
 

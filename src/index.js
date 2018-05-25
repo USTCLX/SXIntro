@@ -36,7 +36,7 @@ class SXIntro {
 		if (opts) {
 			const keys = Object.keys(this.options);
 			keys.forEach((key) => {
-				this.options[key] = opts[key];
+				this.options[key] = opts[key] !== undefined ? opts[key] : this.options[key];
 			});
 		}
 
@@ -102,10 +102,11 @@ class SXIntro {
 	 */
 	_getIntroItems(selector) {
 		const tempIntroItems = utils.querySelector(this.targetElement, selector);
+		const {options: {flag} } = this;
 		this.introItems = [];
 		for (let i = 0, il = tempIntroItems.length; i < il; i++) {
 			const elem = tempIntroItems[i];
-			const steps = utils.parseDataStep(elem);
+			const steps = utils.parseDataStep(elem, flag);
 			steps.forEach((step) => {
 				if (utils.isNumber(step)) {
 					this.introItems.push({

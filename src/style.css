@@ -1,7 +1,7 @@
 /* 引导元素样式 */
 
 .intro-showElement, tr.intro-showElement>td, tr.intro-showElement>th {
-	z-index: 9999999 !important;
+	z-index: 1300 !important;
 	position: relative;
 }
 
@@ -14,7 +14,7 @@
 	bottom: 0%;
 	left: 0%;
 	right: 0%;
-	z-index: 99999;
+	z-index: 999;
 	opacity: 0;
 	background: -moz-radial-gradient(center, ellipse farthest-corner, rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0.9) 100%);
 	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(100%, rgba(0, 0, 0, 0.9)));
@@ -38,7 +38,7 @@
 .intro-helperLayer {
 	box-sizing: content-box;
 	position: absolute;
-	z-index: 9999998;
+	z-index: 1100;
 	background-color: #FFF;
 	background-color: rgba(255, 255, 255, .9);
 	border: 1px solid #777;
@@ -64,7 +64,7 @@
 	box-sizing: content-box;
 	position: absolute;
 	visibility: hidden;
-	z-index: 1000000000;
+	z-index: 1200;
 	background-color: transparent;
 	-webkit-transition: all 0.3s ease-out;
 	-moz-transition: all 0.3s ease-out;

@@ -260,8 +260,8 @@ function getCSSProp(elem, prop) {
  * 解析dom中data-step数据
  * @param {Domain} dom dom元素
  */
-function parseDataStep(dom) {
-	const dataStep = getAttribute(dom, 'data-step');
+function parseDataStep(dom, flag) {
+	const dataStep = getAttribute(dom, flag);
 	const arr = (dataStep || '').split('-');
 	return arr.map(item => parseInt(item, 10));
 }

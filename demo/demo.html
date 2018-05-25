@@ -10,23 +10,37 @@
 	<script src="../dist/SXIntro.bundle.js"></script>
 	<script>
 		window.onload = function () {
-			const intro = new SXIntro(null,{
-				flag:'data-haha'
-			})
+			const intro = new SXIntro()
 				.setIntro([
-					{	
-						index:1,
-						tooltip:'你好',
-						position:'bottom'
-					},{
-						index:2,
-						tooltip:'这是一段导航',
-						position:'bottom'
-					},{
-						index:3,
-						tooltip:'这是fix元素',
-						position:'top'
-					},
+					{
+						index: 1,
+						tooltip: '你好',
+						position: 'bottom'
+					}, {
+						index: 2,
+						tooltip: '这是一段导航',
+						position: 'bottom'
+					}, {
+						index: 3,
+						tooltip: '这是fix元素',
+						position: 'top'
+					}, {
+						index: 4,
+						tooltip: '右边显示',
+						position: 'right'
+					}, {
+						index: 5,
+						tooltip: '左边显示',
+						position: 'left'
+					}, {
+						index: 6,
+						tooltip: '上边显示',
+						position: 'top'
+					}, {
+						index: 7,
+						tooltip: '哈哈，第七步，回到第四步的位置',
+						position: 'right'
+					}
 				])
 				.start();
 		}

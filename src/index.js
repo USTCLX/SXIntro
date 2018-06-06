@@ -102,7 +102,7 @@ class SXIntro {
 	 */
 	_getIntroItems(selector) {
 		const tempIntroItems = utils.querySelector(this.targetElement, selector);
-		const {options: {flag} } = this;
+		const { options: { flag } } = this;
 		this.introItems = [];
 		for (let i = 0, il = tempIntroItems.length; i < il; i++) {
 			const elem = tempIntroItems[i];
@@ -401,6 +401,8 @@ class SXIntro {
 			nextBtn.setAttribute('disabled', 'disabled');
 			utils.addClass(nextBtn, 'intro-disabled');
 			skipBtn.innerText = options.finishLabel;
+		} else {
+			skipBtn.innerText = options.skipLabel;
 		}
 	}
 
